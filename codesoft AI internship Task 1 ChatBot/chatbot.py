@@ -12,7 +12,7 @@ def simple_chatbot(user_input):
         r'\btime\b': f"The current time is {datetime.now().strftime('%H:%M')}.",
         r'\bdate\b': f"Today's date is {datetime.now().strftime('%Y-%m-%d')}.",
         r'\bquit\b': "Chatbot: Goodbye! Thanks for chatting with me.",
-        r'\bjoke\b': "Here's a joke for you: Why don't scientists trust atoms? Because they make up everything!",
+        r'\bjoke\b': get_random_joke(),
         r'\bcalculate\b': calculate,
         r'\bweather\b': "I'm just a chatbot and cannot check the weather at the moment. Sorry!",
         r'\b(?:how.*)\b(?:you.*)\b(?:help.*)\b': "I can assist you with various tasks such as providing information, telling jokes, and performing calculations."
@@ -25,6 +25,14 @@ def simple_chatbot(user_input):
             return reply
 
     return "I'm sorry, I don't understand that."
+
+def get_random_joke():
+    jokes = [
+        "Why don't scientists trust atoms? Because they make up everything!",
+        "Parallel lines have so much in common. It's a shame they'll never meet.",
+        "Why did the scarecrow win an award? Because he was outstanding in his field!"
+    ]
+    return random.choice(jokes)
 
 def calculate(user_input):
     match = re.search(r'(\d+)\s*([-+*\/])\s*(\d+)', user_input, re.I)
