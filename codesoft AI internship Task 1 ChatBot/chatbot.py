@@ -6,7 +6,7 @@ def simple_chatbot(user_input):
     responses = {
         r'\bhello\b': "Hello! How can I help you?",
         r'\bwho are you\b': "I'm a chatbot, and I'm here to assist you!",
-        r'\bwho is your boss\b': "Saksham is my boss!",
+        r'\bwho is your master\b': "Saksham is my master!",
         r'\bwhat can you do here\b': "I'm a chatbot, and I'm here to assist you!",
         r'\bbye\b': "Goodbye! Have a great day!",
         r'\btime\b': f"The current time is {datetime.now().strftime('%H:%M')}.",
