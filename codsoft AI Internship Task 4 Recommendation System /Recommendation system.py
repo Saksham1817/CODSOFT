@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 users = {
-    "Harry": [("Harry Potter", 5), ("Spider Man", 4), ("James Bond", 3)],
+    "saksham": [("Harry Potter", 5), ("Spider Man", 4), ("James Bond", 3)],
     "Tobi": [("Harry Potter", 4), ("The Dark Knight", 5), ("Two States", 3)],
     "Ethan": [("James Bond", 5), ("Two States", 4), ("World War One", 3)],
     "Veer": [("James Bond", 5), ("Two States", 5), ("The Dark Knight", 3)],
@@ -19,6 +19,7 @@ movies = {
     "The Dark Knight": {"genre": "thriller", "keywords": ["suspense", "action"]},
     "Two States": {"genre": "romance", "keywords": ["love", "relationships"]},
     "World War One": {"genre": "historical fiction", "keywords": ["war", "history"]},
+    "The Shining": {"genre": "horror", "keywords": ["psychological", "creepy"]},  # Added "horror" genre
 }
 
 
@@ -51,19 +52,27 @@ def cosine_similarity(vec1, vec2):
 user_vectors = {user: create_user_vector(data) for user, data in users.items()}
 movie_vectors = {movie: create_movie_vector(data) for movie, data in movies.items()}
 
+# Display available genres
+available_genres = set(movie["genre"] for movie in movies.values())
+print("Available genres:", ", ".join(available_genres))
 
-def recommend_movies(user, genre, n=3):
+
+def recommend_movies(user, n=3):
     user_vec = user_vectors[user]
+    user_genre = input("Enter your preferred genre: ").lower()
     # Filter movie vectors based on the user's chosen genre
-    genre_movie_vectors = {movie: vec for movie, vec in movie_vectors.items() if movies[movie]["genre"] == genre}
+    genre_movie_vectors = {movie: vec for movie, vec in movie_vectors.items() if movies[movie]["genre"] == user_genre}
+    if not genre_movie_vectors:
+        print("No movies found in the specified genre.")
+        return
     similarities = {movie: cosine_similarity(user_vec, movie_vec) for movie, movie_vec in genre_movie_vectors.items() if movie not in [b[0] for b in users[user]]}
     sorted_sims = sorted(similarities.items(), key=lambda item: item[1], reverse=True)
     return sorted_sims[:n]
 
 
-user = "Harry"
-user_genre = "sci-fi"  # Example user-chosen genre
-recommendations = recommend_movies(user, user_genre)
-print(f"Recommendations for {user} in the {user_genre} genre:")
-for movie, similarity in recommendations:
-    print(f"- {movie} ({similarity:.2f})")
+user = "saksham"
+recommendations = recommend_movies(user)
+if recommendations:
+    print(f"Recommendations for {user}:")
+    for movie, similarity in recommendations:
+        print(f"- {movie} ({similarity:.2f})")
