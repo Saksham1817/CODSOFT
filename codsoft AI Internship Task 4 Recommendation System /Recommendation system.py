@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 users = {
-    "saksham": [("Harry Potter", 5), ("Spider Man", 4), ("James Bond", 3)],
+    "Saksham": [("Harry Potter", 5), ("Spider Man", 4), ("James Bond", 3)],
     "Tobi": [("Harry Potter", 4), ("The Dark Knight", 5), ("Two States", 3)],
     "Ethan": [("James Bond", 5), ("Two States", 4), ("World War One", 3)],
     "Veer": [("James Bond", 5), ("Two States", 5), ("The Dark Knight", 3)],
@@ -19,7 +19,15 @@ movies = {
     "The Dark Knight": {"genre": "thriller", "keywords": ["suspense", "action"]},
     "Two States": {"genre": "romance", "keywords": ["love", "relationships"]},
     "World War One": {"genre": "historical fiction", "keywords": ["war", "history"]},
-    "The Shining": {"genre": "horror", "keywords": ["psychological", "creepy"]},  # Added "horror" genre
+    "The Shining": {"genre": "horror", "keywords": ["psychological", "creepy"]},
+    # Additional movies for each genre
+    "Lord of the Rings": {"genre": "fantasy", "keywords": ["elves", "ring"]},
+    "Star Wars": {"genre": "sci-fi", "keywords": ["galaxy", "force"]},
+    "Sherlock Holmes": {"genre": "mystery", "keywords": ["investigation", "sleuth"]},
+    "Inception": {"genre": "thriller", "keywords": ["dreams", "mind-bending"]},
+    "Pride and Prejudice": {"genre": "romance", "keywords": ["society", "courtship"]},
+    "Gone with the Wind": {"genre": "historical fiction", "keywords": ["civil war", "romance"]},
+    "The Exorcist": {"genre": "horror", "keywords": ["possession", "demonic"]},
 }
 
 
@@ -70,7 +78,7 @@ def recommend_movies(user, n=3):
     return sorted_sims[:n]
 
 
-user = "saksham"
+user = "Saksham"
 recommendations = recommend_movies(user)
 if recommendations:
     print(f"Recommendations for {user}:")
