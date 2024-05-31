@@ -12,7 +12,7 @@ users = {
     "Elon": [("James Bond", 4), ("Harry Potter", 4), ("Spider Man", 3)],
 }
 
-books = {
+movies = {
     "Harry Potter": {"genre": "fantasy", "keywords": ["magic", "adventure"]},
     "Spider Man": {"genre": "sci-fi", "keywords": ["space", "aliens"]},
     "James Bond": {"genre": "mystery", "keywords": ["detective", "crime"]},
@@ -24,19 +24,19 @@ books = {
 
 def create_user_vector(user_data):
     user_vector = defaultdict(int)
-    for book, rating in user_data:
-        for keyword in books[book]["keywords"]:
+    for movie, rating in user_data:
+        for keyword in movies[movie]["keywords"]:
             user_vector[keyword] += rating
-        user_vector[books[book]["genre"]] += rating  # Add genre to user vector
+        user_vector[movies[movie]["genre"]] += rating  # Add genre to user vector
     return user_vector
 
 
-def create_book_vector(book_data):
-    book_vector = defaultdict(int)
-    for keyword in book_data["keywords"]:
-        book_vector[keyword] = 1
-    book_vector[book_data["genre"]] = 1  # Add genre to book vector
-    return book_vector
+def create_movie_vector(movie_data):
+    movie_vector = defaultdict(int)
+    for keyword in movie_data["keywords"]:
+        movie_vector[keyword] = 1
+    movie_vector[movie_data["genre"]] = 1  # Add genre to movie vector
+    return movie_vector
 
 
 def cosine_similarity(vec1, vec2):
@@ -49,18 +49,21 @@ def cosine_similarity(vec1, vec2):
 
 
 user_vectors = {user: create_user_vector(data) for user, data in users.items()}
-book_vectors = {book: create_book_vector(data) for book, data in books.items()}
+movie_vectors = {movie: create_movie_vector(data) for movie, data in movies.items()}
 
 
-def recommend_books(user, n=3):
+def recommend_movies(user, genre, n=3):
     user_vec = user_vectors[user]
-    similarities = {book: cosine_similarity(user_vec, book_vec) for book, book_vec in book_vectors.items() if book not in [b[0] for b in users[user]]}
+    # Filter movie vectors based on the user's chosen genre
+    genre_movie_vectors = {movie: vec for movie, vec in movie_vectors.items() if movies[movie]["genre"] == genre}
+    similarities = {movie: cosine_similarity(user_vec, movie_vec) for movie, movie_vec in genre_movie_vectors.items() if movie not in [b[0] for b in users[user]]}
     sorted_sims = sorted(similarities.items(), key=lambda item: item[1], reverse=True)
     return sorted_sims[:n]
 
 
 user = "Harry"
-recommendations = recommend_books(user)
-print(f"Recommendations for {user}:")
-for book, similarity in recommendations:
-    print(f"- {book} ({similarity:.2f})")
+user_genre = "sci-fi"  # Example user-chosen genre
+recommendations = recommend_movies(user, user_genre)
+print(f"Recommendations for {user} in the {user_genre} genre:")
+for movie, similarity in recommendations:
+    print(f"- {movie} ({similarity:.2f})")
